@@ -1,20 +1,22 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { useRef } from 'react';
+import { useState } from 'react';
 
 export default function Chat() {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [input, setInput] = useState('');
   const { messages, sendMessage } = useChat();
 
   return (
-    <div style={{ padding: 20, maxWidth: 600, margin: '0 auto' }}>
-      <h1>Chat</h1>
+    <div className="p-5 max-w-2xl mx-auto">
+      <h1 className="text-center mb-5 text-2xl font-bold">Chat</h1>
 
       <div>
         {messages.map((message) => (
-          <div key={message.id} style={{ marginBottom: 10 }}>
-            <strong>{message.role === 'user' ? 'User: ' : 'AI: '}</strong>
+          <div key={message.id} className="mb-2.5">
+            <strong className={message.role === 'user' ? 'text-blue-600' : 'text-green-600'}>
+              {message.role === 'user' ? 'User: ' : 'AI: '}
+            </strong>
             {message.parts.map((part, i) => {
               switch (part.type) {
                 case 'text':
@@ -28,20 +30,21 @@ export default function Chat() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          const text = inputRef.current?.value || '';
+          const text = input || '';
           if (text.trim()) {
             sendMessage({ parts: [{ type: 'text', text }] });
-            if (inputRef.current) inputRef.current.value = '';
+            setInput('');
           }
         }}
-        style={{ marginTop: 20, display: 'flex', gap: 8 }}
+        className="mt-5 flex gap-2"
       >
         <input
-          ref={inputRef}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
           placeholder="Send a message"
-          style={{ flex: 1, padding: 8 }}
+          className="flex-1 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <button type="submit" style={{ padding: '8px 16px' }}>
+        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
           Send
         </button>
       </form>
