@@ -7,13 +7,17 @@ export default function Chat() {
   const [input, setInput] = useState('');
   const { messages, sendMessage } = useChat();
 
+
+  console.log(messages);
+
+
   return (
     <div className="p-5 max-w-2xl mx-auto">
       <h1 className="text-center mb-5 text-2xl font-bold">Chat</h1>
 
       <div>
         {messages.map((message) => (
-          <div key={message.id} className="mb-2.5">
+          <div key={message.id} className="mb-2.5 text-sm border border-gray-300 dotted p-2">
             <strong className={message.role === 'user' ? 'text-blue-600' : 'text-green-600'}>
               {message.role === 'user' ? 'User: ' : 'AI: '}
             </strong>
